@@ -4,7 +4,9 @@
   "description": "hg-commit tree-sitter grammar",
   "main": "bindings/node",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tree-sitter test",
+    "format": "prettier --write grammar.js package.json",
+    "format-check": "prettier --check grammar.js package.json"
   },
   "author": "zegervdv",
   "license": "ISC",
@@ -12,6 +14,7 @@
     "nan": "^2.18.0"
   },
   "devDependencies": {
+    "prettier": "^3.1.1",
     "tree-sitter-cli": "^0.20.8"
   }
 }

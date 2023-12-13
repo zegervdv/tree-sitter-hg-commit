@@ -52,8 +52,8 @@ module.exports = grammar({
         repeat($._trailer),
         repeat(seq($._newline, optional($.comment))),
         optional(
-          seq(alias(SCISSORS, $.scissors), optional(alias($._rest, $.message)))
-        )
+          seq(alias(SCISSORS, $.scissors), optional(alias($._rest, $.message))),
+        ),
       ),
 
     /**
@@ -64,7 +64,7 @@ module.exports = grammar({
     _body_line: ($) =>
       prec.right(
         PARSE_PRECEDENCE.BODY_LINE,
-        seq($._newline, optional(choice($.message, $.comment)))
+        seq($._newline, optional(choice($.message, $.comment))),
       ),
 
     _trailer: ($) =>
@@ -80,8 +80,8 @@ module.exports = grammar({
         // Otherwise message lines must not start with '#'.
         seq(
           choice($.user, $.commit, $._non_punctuated_word, $._non_comment),
-          repeat($._text)
-        )
+          repeat($._text),
+        ),
       ),
 
     _text: ($) => choice($.user, $.item, $.commit, $._word),
@@ -94,7 +94,7 @@ module.exports = grammar({
         $.summary,
         $._branch_declaration,
         // fallback to regular comment words if the words are nonsense
-        repeat1($._word)
+        repeat1($._word),
       ),
 
     /**
@@ -106,7 +106,7 @@ module.exports = grammar({
       seq(
         field("key", $.trailer_key),
         field("separator", choice(":", "=")),
-        field("value", $.trailer_value)
+        field("value", $.trailer_value),
       ),
 
     trailer_key: ($) => $._word,
@@ -122,7 +122,7 @@ module.exports = grammar({
           ";",
           "onto",
           $.commit,
-          $._newline
+          $._newline,
         ),
         seq("#", alias($._rebase_header, $.header), $._newline),
         repeat(seq("#", $.rebase_command, $._newline)),
@@ -143,10 +143,10 @@ module.exports = grammar({
           "'",
           $.commit,
           "'",
-          "."
+          ".",
         ),
         $._newline,
-        optional("#")
+        optional("#"),
       ),
 
     _rebase_header: ($) =>
@@ -160,7 +160,7 @@ module.exports = grammar({
           /commands?/,
           "done",
           ")",
-          ":"
+          ":",
         ),
         seq(
           "Next",
@@ -172,9 +172,9 @@ module.exports = grammar({
           "remaining",
           /commands?/,
           ")",
-          ":"
+          ":",
         ),
-        seq("No", "commands", "remaining", ".")
+        seq("No", "commands", "remaining", "."),
       ),
 
     summary: ($) =>
@@ -183,20 +183,20 @@ module.exports = grammar({
           alias($._change_header, $.header),
           $._newline,
           repeat1(seq("HG:", $.change, $._newline)),
-          optional("HG:")
+          optional("HG:"),
         ),
         seq(
           $.header,
           $._newline,
           repeat1(seq("HG:", $.path, $._newline)),
-          optional("HG:")
-        )
+          optional("HG:"),
+        ),
       ),
 
     _change_header: ($) =>
       choice(
         seq("Changes", "to", "be", "committed", ":"),
-        seq("Changes", "not", "staged", "for", "commit", ":")
+        seq("Changes", "not", "staged", "for", "commit", ":"),
       ),
 
     _branch_declaration: ($) =>
@@ -212,7 +212,7 @@ module.exports = grammar({
           "with",
           "'",
           $.branch,
-          "'."
+          "'.",
         ),
         seq(
           "Your",
@@ -225,7 +225,7 @@ module.exports = grammar({
           "by",
           /\d+/,
           /commits?/,
-          "."
+          ".",
         ),
         seq(
           "Your",
@@ -236,10 +236,10 @@ module.exports = grammar({
           "'",
           "have",
           "diverged",
-          ","
+          ",",
         ),
         // # HEAD detached at upstream/gh-pages
-        seq("HEAD", "detached", "at", choice($.commit, $.branch))
+        seq("HEAD", "detached", "at", choice($.commit, $.branch)),
       ),
 
     header: ($) => seq(choice("Conflicts", seq("Untracked", "files")), ":"),
@@ -252,9 +252,9 @@ module.exports = grammar({
         optional(
           seq(
             token(prec(LEXICAL_PRECEDENCE.PATH_SEPARATOR_ARROW, "->")),
-            $.path
-          )
-        )
+            $.path,
+          ),
+        ),
       ),
 
     commit: ($) => /[a-f0-9]{7,40}/,
@@ -266,7 +266,7 @@ module.exports = grammar({
     _word: ($) =>
       prec(
         PARSE_PRECEDENCE.NONSENSE,
-        choice($._non_punctuated_word, $._non_comment, $._any_word)
+        choice($._non_punctuated_word, $._non_comment, $._any_word),
       ),
     /**
      * For most of the details on branch name constraints, see https://git-scm.com/docs/git-check-ref-format
@@ -285,9 +285,9 @@ module.exports = grammar({
           "reword",
           "exec",
           "label",
-          "reset"
+          "reset",
         ),
-        repeat1(/\S+/)
+        repeat1(/\S+/),
       ),
 
     path: ($) => repeat1(token(prec(LEXICAL_PRECEDENCE.PATH, /\S+/))),
