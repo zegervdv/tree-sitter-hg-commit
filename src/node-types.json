@@ -310,10 +310,6 @@
     "named": false
   },
   {
-    "type": "On",
-    "named": false
-  },
-  {
     "type": "Untracked",
     "named": false
   },
@@ -367,11 +363,11 @@
   },
   {
     "type": "commit",
-    "named": false
+    "named": true
   },
   {
     "type": "commit",
-    "named": true
+    "named": false
   },
   {
     "type": "committed",
