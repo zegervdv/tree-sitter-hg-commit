@@ -112,14 +112,10 @@ module.exports = grammar({
     trailer_value: ($) => repeat1(choice($.user, $.item, $.commit, $._word)),
 
     meta: ($) =>
-      seq(
-        field("key", $.meta_key),
-        ":",
-        field("value", $.meta_value)
-      ),
+      seq(field("key", $.meta_key), ":", field("value", $.meta_value)),
     meta_key: ($) => $._word,
     meta_value: ($) => repeat1($._word),
-    
+
     change: ($) =>
       seq(
         field("kind", choice("added", "changed", "removed")),
