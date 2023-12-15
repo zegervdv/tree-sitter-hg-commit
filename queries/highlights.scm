@@ -8,9 +8,8 @@
 (change kind: "changed" @diff.delta)
 
 (meta
-  key: _ @type
-  value: _ @string)
-
+  key: (meta_key) @type
+  value: (meta_value) @string)
 
 (trailer
   key: (trailer_key) @variable.other.member

@@ -113,14 +113,13 @@ module.exports = grammar({
 
     meta: ($) =>
       seq(
-        field("key", $._word,
+        field("key", $.meta_key),
         ":",
-        field("value", repeat1($._word)
+        field("value", $.meta_value)
       ),
+    meta_key: ($) => $._word,
+    meta_value: ($) => repeat1($._word),
     
-
-    header: ($) => seq(choice("Conflicts", seq("Untracked", "files")), ":"),
-
     change: ($) =>
       seq(
         field("kind", choice("added", "changed", "removed")),
