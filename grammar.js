@@ -90,9 +90,8 @@ module.exports = grammar({
 
     _comment_body: ($) =>
       choice(
-        alias($._rebase_summary, $.summary),
-        $.summary,
-        $._branch_declaration,
+        $.meta,
+        repeat1($.change),
         // fallback to regular comment words if the words are nonsense
         repeat1($._word),
       ),
@@ -112,142 +111,20 @@ module.exports = grammar({
     trailer_key: ($) => $._word,
     trailer_value: ($) => repeat1(choice($.user, $.item, $.commit, $._word)),
 
-    _rebase_summary: ($) =>
+    meta: ($) =>
       seq(
-        seq(
-          "interactive",
-          "rebase",
-          "in",
-          "progress",
-          ";",
-          "onto",
-          $.commit,
-          $._newline,
-        ),
-        seq("#", alias($._rebase_header, $.header), $._newline),
-        repeat(seq("#", $.rebase_command, $._newline)),
-        seq("#", alias($._rebase_header, $.header), $._newline),
-        repeat(seq("#", $.rebase_command, $._newline)),
-        seq(
-          "#",
-          "You",
-          "are",
-          "currently",
-          repeat(/\S+/),
-          "rebasing",
-          "branch",
-          "'",
-          $.branch,
-          "'",
-          "on",
-          "'",
-          $.commit,
-          "'",
-          ".",
-        ),
-        $._newline,
-        optional("#"),
+        field("key", $._word,
+        ":",
+        field("value", repeat1($._word)
       ),
-
-    _rebase_header: ($) =>
-      choice(
-        seq(
-          "Last",
-          /commands?/,
-          "done",
-          "(",
-          /\d+/,
-          /commands?/,
-          "done",
-          ")",
-          ":",
-        ),
-        seq(
-          "Next",
-          /commands?/,
-          "to",
-          "do",
-          "(",
-          /\d+/,
-          "remaining",
-          /commands?/,
-          ")",
-          ":",
-        ),
-        seq("No", "commands", "remaining", "."),
-      ),
-
-    summary: ($) =>
-      choice(
-        seq(
-          alias($._change_header, $.header),
-          $._newline,
-          repeat1(seq("HG:", $.change, $._newline)),
-          optional("HG:"),
-        ),
-        seq(
-          $.header,
-          $._newline,
-          repeat1(seq("HG:", $.path, $._newline)),
-          optional("HG:"),
-        ),
-      ),
-
-    _change_header: ($) =>
-      choice(
-        seq("Changes", "to", "be", "committed", ":"),
-        seq("Changes", "not", "staged", "for", "commit", ":"),
-      ),
-
-    _branch_declaration: ($) =>
-      choice(
-        seq("branch", $.branch),
-        seq(
-          "Your",
-          "branch",
-          "is",
-          "up",
-          "to",
-          "date",
-          "with",
-          "'",
-          $.branch,
-          "'.",
-        ),
-        seq(
-          "Your",
-          "branch",
-          "is",
-          choice(seq("ahead", "of"), "behind"),
-          "'",
-          $.branch,
-          "'",
-          "by",
-          /\d+/,
-          /commits?/,
-          ".",
-        ),
-        seq(
-          "Your",
-          "branch",
-          "and",
-          "'",
-          $.branch,
-          "'",
-          "have",
-          "diverged",
-          ",",
-        ),
-        // # HEAD detached at upstream/gh-pages
-        seq("HEAD", "detached", "at", choice($.commit, $.branch)),
-      ),
+    
 
     header: ($) => seq(choice("Conflicts", seq("Untracked", "files")), ":"),
 
     change: ($) =>
       seq(
-        field("kind", choice("new file", "modified", "renamed", "deleted")),
-        ":",
+        field("kind", choice("added", "changed", "removed")),
+        // ":",
         $.path,
         optional(
           seq(

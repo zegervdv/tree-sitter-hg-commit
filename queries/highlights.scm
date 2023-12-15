@@ -1,14 +1,16 @@
 (subject) @markup.heading
 (path) @string.special.path
-(branch) @string.special.symbol
 (commit) @constant
 (item) @markup.link.url
-(header) @tag
 
-(change kind: "new file" @diff.plus)
-(change kind: "deleted" @diff.minus)
-(change kind: "modified" @diff.delta)
-(change kind: "renamed" @diff.delta.moved)
+(change kind: "added" @diff.plus)
+(change kind: "removed" @diff.minus)
+(change kind: "changed" @diff.delta)
+
+(meta
+  key: _ @type
+  value: _ @string)
+
 
 (trailer
   key: (trailer_key) @variable.other.member
