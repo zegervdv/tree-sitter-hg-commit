@@ -51,11 +51,10 @@ module.exports = grammar({
         repeat($._body_line),
         repeat($._trailer),
         repeat(seq($._newline, optional($.comment))),
-        optional(
-          seq(alias(SCISSORS, $.scissors), optional(alias($._rest, $.message))),
-        ),
+        optional(seq($.scissors, optional(alias($._rest, $.message)))),
       ),
 
+    scissors: ($) => seq(/HG: -+ >8 -+\r?\n/, repeat($.comment)),
     /**
      * The subject of the commit message: the first line.
      */

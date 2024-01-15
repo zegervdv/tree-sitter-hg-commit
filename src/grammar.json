@@ -70,13 +70,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "HG: -+ >8 -+\\r?\\nHG: Do not touch the line above.\\r?\\nHG: Everything below will be removed.\\r?\\n?"
-                  },
-                  "named": true,
-                  "value": "scissors"
+                  "type": "SYMBOL",
+                  "name": "scissors"
                 },
                 {
                   "type": "CHOICE",
@@ -101,6 +96,22 @@
               "type": "BLANK"
             }
           ]
+        }
+      ]
+    },
+    "scissors": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "HG: -+ >8 -+\\r?\\n"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "comment"
+          }
         }
       ]
     },
